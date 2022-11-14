@@ -1,8 +1,8 @@
 import { getModelForClass, index, prop } from '@typegoose/typegoose';
-import { IUserDB } from './user.types';
+import { IAccountDB } from './account.types';
 
 @index({ age: 1 })
-export class User implements IUserDB {
+export class Account implements IAccountDB {
 
   @prop()
   public  lastName: string;
@@ -17,9 +17,9 @@ export class User implements IUserDB {
   public phone: string;
 }
 
-const UserModel = getModelForClass(User, {
+const UserModel = getModelForClass(Account, {
   schemaOptions: {
-    timestamps: true
+    timestamps: true,
   }
 });
 

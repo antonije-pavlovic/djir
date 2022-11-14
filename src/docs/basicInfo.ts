@@ -1,7 +1,7 @@
 export default {
   openapi: '3.0.0',
   info: {
-    title: 'Raidensoft boilerplate',
+    title: 'Djir motorcyclist app',
     description: 'Everything you need',
     version: '1.0.0',
     contact: {

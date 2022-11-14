@@ -1,4 +1,4 @@
-# Raidensoft project boilerplate
+# Djir backend
 
 # Code style
 

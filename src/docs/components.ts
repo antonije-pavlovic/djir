@@ -1,10 +1,10 @@
-import userShemas from './user/schemas';
+import accountSchema from './account/schemas';
 import postSchema from './post/models';
 
 export default {
   components: {
     schemas: {
-      ...userShemas,
+      ...accountSchema,
       ...postSchema,
 
       Error: {

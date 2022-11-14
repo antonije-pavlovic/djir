@@ -1,4 +1,4 @@
-import userPaths from './user/paths';
+import userPaths from './account/paths';
 import postPaths from './post/paths';
 
 export default {

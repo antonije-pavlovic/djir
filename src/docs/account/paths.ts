@@ -1,23 +1,23 @@
 export default {
-  '/user': {
+  '/account': {
     get: {
-      tags: ['User'],
+      tags: ['Account'],
       parameters: [{
         name: '_id',
         in: 'path',
         required: true,
-        description: 'User ID',
+        description: 'Account ID',
         schema: {
           type: 'string',
         }
       }],
       responses: {
         200: {
-          description: 'Get user by id',
+          description: 'Get account by id',
           content: {
             'application/json': {
               schema: {
-                $ref: '#/components/schemas/UserModel',
+                $ref: '#/components/schemas/AccountModel',
               },
             },
           },

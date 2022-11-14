@@ -1,7 +1,7 @@
 export default {
   tags: [
     {
-      name: 'User',
+      name: 'Account',
     },
     {
       name: 'Post',

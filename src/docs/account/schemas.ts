@@ -1,25 +1,25 @@
 export default {
-  UserModel: {
+  AccountModel: {
     type: 'object',
     properties: {
       name: {
         type: 'string',
-        description: 'Users name',
+        description: 'Account name',
         example: 'John'
       },
       lastName: {
         type: 'string',
-        description: 'Users lastname',
+        description: 'Account lastname',
         example: 'Doe'
       },
       email: {
         type: 'string',
-        description: 'Users email',
+        description: 'Account email',
         example: 'john.doe@gmail.com'
       },
       phone: {
         type: 'string',
-        description: 'Users phone number',
+        description: 'Account phone number',
         example: '555-333'
       }
     }

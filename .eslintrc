@@ -1,0 +1,35 @@
+{
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/eslint-recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "rules": { 
+        "no-console": 1,
+        "no-trailing-spaces": "error",
+        "max-len": ["error", { "code": 120 }],
+        "max-statements-per-line": ["error", { "max": 1 }],
+        "comma-spacing": ["error", { "before": false, "after": true }],
+        "brace-style": "error",
+        "block-spacing": "error",
+        "require-await": "error",
+        "no-invalid-this": "error",
+        "max-statements": ["error", 15],
+        "max-params": ["error", 4],
+        "max-depth": ["error", 4],
+        "complexity": ["error", 10],
+        "default-param-last": ["error"],
+        "default-case": "error",
+        "curly": "error",
+        "camelcase": "error",
+        "consistent-return": "error",
+        "quotes": ["error", "single", { "allowTemplateLiterals": true }],
+        "indent": ["error", 2],
+        "comma-dangle": ["error", "only-multiline"]
+      }
+}

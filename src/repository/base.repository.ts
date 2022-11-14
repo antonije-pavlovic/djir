@@ -103,7 +103,7 @@ export default class BaseRepository {
         throw new ConflictError(invalidValues);
       }
 
-      const result = await this.model.findOne(filter, options).lean();
+      const result = await this.model.findOne(filter, options).lean()
 
       if(!result) {
         return null;

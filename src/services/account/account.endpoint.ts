@@ -1,22 +1,22 @@
 import { Response } from 'express';
 import { ApiBodyRequest, ApiQueryRequest } from '../api/api.types';
-import UserService from './user.service';
-import { UserGet, IUser, UpdateUser, DeleteUser, UpdateUserAPI } from './user.types';
+import AccountService from './account.service';
+import { AccountGet, IAccount, UpdateAccount, DeleteAccount, UpdateUserAPI } from './account.types';
 
-export default class UserEndpoint {
+export default class AccountEndpoint {
 
-  private userService: UserService;
+  private userService: AccountService;
   constructor() {
-    this.userService = new UserService();
+    this.userService = new AccountService();
   }
 
-  public create = async (request: ApiBodyRequest<IUser>, response: Response) => {
+  public create = async (request: ApiBodyRequest<IAccount>, response: Response) => {
     const newUser = await this.userService.create(request.body);
     response.status(200).json(newUser);
   }
 
-  public get = async (request: ApiQueryRequest<UserGet>, response: Response) => {
-    const getParams: UserGet = {
+  public get = async (request: ApiQueryRequest<AccountGet>, response: Response) => {
+    const getParams: AccountGet = {
       _id: request.query._id
     };
 
@@ -29,7 +29,7 @@ export default class UserEndpoint {
   }
 
   public update = async (request: ApiBodyRequest<UpdateUserAPI>, response: Response) => {
-    const updateParams: UpdateUser = {
+    const updateParams: UpdateAccount = {
       filter: {
         _id: request.body._id
       },
@@ -45,7 +45,7 @@ export default class UserEndpoint {
     response.status(200).json(updatedUser);
   }
 
-  public delete = async (request: ApiQueryRequest<DeleteUser>, response: Response) => {
+  public delete = async (request: ApiQueryRequest<DeleteAccount>, response: Response) => {
     const deletedUser = await this.userService.delete(request.query);
     response.status(200).json(deletedUser);
   }
