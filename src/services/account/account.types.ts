@@ -1,4 +1,3 @@
-import { ObjectId } from 'mongoose';
 import {  DeleteParams, UpdateParams, GetParams } from '../../repository/repository.models';
 import { IdAPI } from '../api/api.types';
 
@@ -11,7 +10,7 @@ export interface IAccountDB {
 }
 
 export interface IAccount extends IAccountDB {
-    _id: ObjectId
+    id: string
 }
 
 export type AccountGet = GetParams<Omit<IAccount, 'phone' | 'lastName' | 'name'>>;

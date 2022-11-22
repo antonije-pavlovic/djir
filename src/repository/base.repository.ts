@@ -1,118 +1,84 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable consistent-return */
-
-import mongoose, { MongooseOptions } from 'mongoose';
-import ConflictError from '../errors/custom/conflict.error';
-import NotFoundError from '../errors/custom/not.found';
-import UnprocessableError from '../errors/custom/unprocessable.error';
 import config from '../config/config';
+import { Pool, PoolClient } from 'pg';
+import { DestructuredQuery } from './repository.models';
+
 
 export default class BaseRepository {
 
-  protected model: any;
-  protected _connection;
+  protected pool: Pool;
+  protected table: string;
 
-  constructor(model: any) {
-    this.model = model;
-    this._connect()
+  constructor() {
+    this.connect()
   }
 
-  private _connect = async () => {
+  private connect = () => {
+    this.pool = new Pool({
+      host: config.postgres.host,
+      port: config.postgres.port,
+      user: config.postgres.username,
+      password: config.postgres.password,
+      max: 20
+    });
 
-    this._connection = await mongoose.connect(config.mongo.url);
-    console.log('MongooseMixin: connected successfully.');
-    // TODO: handle disconnections
-    // TODO: handlle errors
+    this.pool.on('error', (err: Error) => {
+      console.log(err);
+    });
   }
 
-  protected _create = async (doc: any | any[], options?: MongooseOptions) => {
-    try {
-      return await this.model.create(doc, options);
-    } catch (error) {
-      console.log(error)
-      // TODO: log error and send 500 applicatoin http error
-      if(error.code === 11000) {
-        throw new ConflictError();
-      }
-
-      if(error.name === 'ValidationError') {
-        throw new UnprocessableError({
-          kind: error.errors.kind,
-          path: error.errors.path,
-          value: error.errors.value,
-        });
-      }
-    }
+  protected executeQuery = async (text: any, values: any) => {
+    console.log(text)
+    console.log(values)
+    return await this.pool.query(text, values)
   }
 
   /**
-   * We set options `new` property to true, to return the document after update was applied.
+   * Use to get one client from the pool.
+   * Use for transactions.
+   *
+   * @returns PoolClient
    */
-  protected _update = async (filter: any, params: any,  options?: any): Promise<any> => {
-    try {
-      if (options) {
-        options.new = true;
-      } else {
-        options = { new: true };
-      }
-
-      const result = await this.model.findOneAndUpdate(filter, params, options).lean();
-
-      if (!result) {
-        throw new NotFoundError(filter);
-      }
-      return result;
-    } catch(error) {
-      // TODO: Log the error and transform to https error
-    }
+  protected getClient = async (): Promise<PoolClient>  =>{
+    return await this.pool.connect();
   }
 
-  protected _delete = async (filter: any, options?: MongooseOptions) => {
-    try {
-      const result = await this.model.findOneAndDelete(filter, options).lean();
-      if (!result) {
-        throw new NotFoundError(filter);
-      }
-      return result;
+  protected _create = async (object: any) => {
+    const destructureQueryObject = this.destructureQueryObject(object)
 
-    } catch(error) {
-      // TODO: Log the error and transform to https error
+    if(!destructureQueryObject) {
+      return;
     }
+
+    const queryText = `INSERT INTO ${this.table}(${ destructureQueryObject.keys })
+          VALUES(${ destructureQueryObject.placeholders }) RETURNING *`;
+
+    return await this.executeQuery(queryText, destructureQueryObject.values)
   }
 
-  protected _find = async (filter: any, options?: MongooseOptions) => {
-    try {
-      return await this.model.find(filter, options).lean();
+  protected destructureQueryObject(object: any): DestructuredQuery | null {
+    const values = Object.values(object);
+    const keys = Object.keys(object);
+    const numOfProps = values.length;
 
-    } catch(error) {
-      // TODO: TODO: Log the error and transform to https error
+    if(!numOfProps) {
+      return null;
     }
-  }
 
-  protected _get = async (filter: any, options?: MongooseOptions) => {
-    try {
-      const invalidValues: any[] = [];
+    let placeholders = '$1';
+    for(let i = 1; i < numOfProps; i++) {
+      placeholders += `, $${i + 1}`
+    }
 
-      for(const prop in filter) {
-        if(filter[prop] === null || filter[prop] === undefined) {
-          invalidValues.push({ prop, value: filter[prop] })
-        }
-      }
-
-      if (invalidValues.length) {
-        throw new ConflictError(invalidValues);
-      }
-
-      const result = await this.model.findOne(filter, options).lean()
-
-      if(!result) {
-        return null;
-      }
-
-      return result;
-
-    } catch(error) {
-      // TODO: TODO: Log the error and transform to https error
+    const doubleQuatedKeys: string[] = []
+    for(let i = 0; i < numOfProps; i++) {
+      doubleQuatedKeys.push(`"${keys[i]}"`)
+    }
+    return {
+      keys: doubleQuatedKeys,
+      values,
+      placeholders
     }
   }
 }

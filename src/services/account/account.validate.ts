@@ -1,7 +1,7 @@
 import { body } from 'express-validator';
 import validator from '../api/middlewares/validator';
 
-export const validateUser = validator([
+export const validateAccount = validator([
   body('name')
     .notEmpty()
     .isString()

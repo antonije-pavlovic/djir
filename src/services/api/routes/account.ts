@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import AccountEndpoint from '../../account/account.endpoint';
 import catchErrors from '../../../errors/catch.error';
-import { validateUser } from '../../account/account.validate';
+import { validateAccount } from '../../account/account.validate';
 
 class AccountRoute {
   public router: Router;
@@ -14,27 +14,15 @@ class AccountRoute {
 
   public registerRoutes() {
 
-    this.router.get('/',
-      catchErrors(this.accountEndpoint.get)
-    );
-
     this.router.post('/',
-      validateUser,
+      validateAccount,
       catchErrors(this.accountEndpoint.create)
-    );
-
-    this.router.put('/',
-      catchErrors(this.accountEndpoint.update)
-    );
-
-    this.router.delete('/',
-      catchErrors(this.accountEndpoint.delete)
     );
 
     return this.router;
   }
 }
 
-const userRoute = new AccountRoute();
+const accountRoute = new AccountRoute();
 
-export default userRoute;
+export default accountRoute;
