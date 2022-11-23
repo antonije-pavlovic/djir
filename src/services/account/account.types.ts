@@ -3,7 +3,7 @@ import { IdAPI } from '../api/api.types';
 
 export interface IAccountDB {
     name: string;
-    lastName: string;
+    last_name: string;
 
     email: string
     phone: string;

@@ -8,7 +8,7 @@ exports.up = pgm => {
     id: 'id',
 
     name: { type: 'varchar(1000)', notNull: true },
-    lastName: { type: 'varchar(1000)', notNull: true },
+    last_name: { type: 'varchar(1000)', notNull: true },
     email: { type: 'varchar(1000)', notNull: true },
     phone: { type: 'varchar(1000)', notNull: true },
 

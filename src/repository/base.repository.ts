@@ -73,7 +73,7 @@ export default class BaseRepository {
 
     const doubleQuatedKeys: string[] = []
     for(let i = 0; i < numOfProps; i++) {
-      doubleQuatedKeys.push(`"${keys[i]}"`)
+      doubleQuatedKeys.push(`${keys[i]}`)
     }
     return {
       keys: doubleQuatedKeys,
