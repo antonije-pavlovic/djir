@@ -13,7 +13,7 @@ export interface IAccount extends IAccountDB {
     id: string
 }
 
-export type AccountGet = GetParams<Omit<IAccount, 'phone' | 'lastName' | 'name'>>;
+export type AccountGet = GetParams<Omit<IAccount, 'phone' | 'last_name' | 'name'>>;
 export type UpdateAccount = UpdateParams<AccountGet, Partial<IAccountDB>>;
 export type DeleteAccount = DeleteParams<AccountGet>;
 

@@ -7,7 +7,7 @@ export default {
         description: 'Account name',
         example: 'John'
       },
-      lastName: {
+      last_name: {
         type: 'string',
         description: 'Account lastname',
         example: 'Doe'
