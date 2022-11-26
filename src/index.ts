@@ -1,23 +1,30 @@
-import app from './services/api/api.service';
-import { Server } from 'http';
+import server from './services/api/api.service';
 import config from './config/config';
 
-const server = app.listen(config.app.port);
 
-const closeApp = (server: Server) => {
-  try {
-    server.close();
-  } catch (err) {
-    // log error
-  } finally{
-    process.exit(0);
+// Run the server!
+server.listen({ port: config.app.port }, function (err, address) {
+  if (err) {
+    console.log(err)
+    process.exit(1)
   }
-};
+  console.log(` Server is now listening on ${ address }`)
+})
+
+// const closeApp = (server: any) => {
+//   try {
+//     server.close();
+//   } catch (err) {
+//     // log error
+//   } finally{
+//     process.exit(0);
+//   }
+// };
 
 
-process.on('SIGINT', () => {
-  closeApp(server);
-});
-process.on('SIGTERM', () => {
-  closeApp(server);
-});
+// process.on('SIGINT', () => {
+//   closeApp(server);
+// });
+// process.on('SIGTERM', () => {
+//   closeApp(server);
+// });

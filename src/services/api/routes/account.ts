@@ -1,40 +1,27 @@
-import { Router } from 'express';
 import AccountEndpoint from '../../account/account.endpoint';
-import catchErrors from '../../../errors/catch.error';
-import { validateAccount } from '../../account/account.validate';
+import { FastifyInstance } from 'fastify'
 
-class AccountRoute {
-  public router: Router;
-  private accountEndpoint: AccountEndpoint;
+export default class AccountRoute {
 
-  constructor() {
-    this.router = Router();
-    this.accountEndpoint = new AccountEndpoint();
-  }
-
-  public registerRoutes() {
-
-    this.router.post('/',
-      validateAccount,
-      catchErrors(this.accountEndpoint.create)
+  public static registerRoutes(fastify: FastifyInstance, _opts: any, done: any) {
+    // console.log(fastify);
+    const accountEndpoint = new AccountEndpoint();
+    fastify.post('/account',
+      accountEndpoint.create
     );
 
-    this.router.get('/:id',
-      catchErrors(this.accountEndpoint.get_by_id)
+    fastify.get('/account/:id',
+      accountEndpoint.get_by_id
     );
 
-    this.router.delete('/:id',
-      catchErrors(this.accountEndpoint.delete_by_id)
+    fastify.delete('/account/:id',
+      accountEndpoint.delete_by_id
     );
 
-    this.router.put('/:id',
-      catchErrors(this.accountEndpoint.update_by_id)
+    fastify.put('/account/:id',
+      accountEndpoint.update_by_id
     );
 
-    return this.router;
+    done();
   }
 }
-
-const accountRoute = new AccountRoute();
-
-export default accountRoute;
