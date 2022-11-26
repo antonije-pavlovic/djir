@@ -1,5 +1,5 @@
 import { IAppConfig } from './app';
-import { IMongoConfig } from './database';
+import { IPostgresConfig } from './database';
 
 export const ENVIRONMENT = {
   LOCAL: 'local',
@@ -10,5 +10,5 @@ export const ENVIRONMENT = {
 
 export interface IConfig {
   app: IAppConfig;
-  mongo: IMongoConfig
+  postgres  : IPostgresConfig
 }

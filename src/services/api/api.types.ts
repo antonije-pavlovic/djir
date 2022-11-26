@@ -1,6 +1,5 @@
 import Express from 'express';
-import { Send, Query } from 'express-serve-static-core';
-import { ObjectId } from 'mongoose';
+import { Send, Query, ParamsDictionary } from 'express-serve-static-core';
 
 
 export interface ApiBodyRequest<T> extends Express.Request {
@@ -13,13 +12,14 @@ export interface ApiQueryRequest<T> extends Express.Request {
 
 export interface ApiRequest<U, T> extends Express.Request {
     body: U,
-    query: Query & T
+    params: ParamsDictionary & T
 }
+
 
 export interface TypedResponse<ResBody> extends Express.Response {
     json: Send<ResBody, this>;
 }
 
 export interface IdAPI {
-  _id: ObjectId;
+  id: number;
 }

@@ -58,3 +58,6 @@ const TIME_IN_SECONDS = {
 ## Files
 All files belonging to one service(entity) should be placed under service directory
 
+
+## Variables
+All variables must ne in snake case.

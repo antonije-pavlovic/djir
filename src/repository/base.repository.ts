@@ -1,118 +1,88 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable consistent-return */
-
-import mongoose, { MongooseOptions } from 'mongoose';
-import ConflictError from '../errors/custom/conflict.error';
-import NotFoundError from '../errors/custom/not.found';
-import UnprocessableError from '../errors/custom/unprocessable.error';
 import config from '../config/config';
+import { Pool, PoolClient } from 'pg';
+
 
 export default class BaseRepository {
 
-  protected model: any;
-  protected _connection;
+  private pool: Pool;
+  protected table: string;
 
-  constructor(model: any) {
-    this.model = model;
-    this._connect()
+  constructor() {
+    this.connect()
   }
 
-  private _connect = async () => {
+  private connect = () => {
+    this.pool = new Pool({
+      host: config.postgres.host,
+      port: config.postgres.port,
+      user: config.postgres.username,
+      password: config.postgres.password,
+      max: 20
+    });
 
-    this._connection = await mongoose.connect(config.mongo.url);
-    console.log('MongooseMixin: connected successfully.');
-    // TODO: handle disconnections
-    // TODO: handlle errors
+    this.pool.on('error', (err: Error) => {
+      console.log(err);
+    });
   }
 
-  protected _create = async (doc: any | any[], options?: MongooseOptions) => {
-    try {
-      return await this.model.create(doc, options);
-    } catch (error) {
-      console.log(error)
-      // TODO: log error and send 500 applicatoin http error
-      if(error.code === 11000) {
-        throw new ConflictError();
-      }
-
-      if(error.name === 'ValidationError') {
-        throw new UnprocessableError({
-          kind: error.errors.kind,
-          path: error.errors.path,
-          value: error.errors.value,
-        });
-      }
-    }
+  protected execute_query = async (text: any, values?: any) => {
+    return await this.pool.query(text, values)
   }
 
   /**
-   * We set options `new` property to true, to return the document after update was applied.
+   * Use to get one client from the pool.
+   * Use for transactions.
+   *
+   * @returns PoolClient
    */
-  protected _update = async (filter: any, params: any,  options?: any): Promise<any> => {
-    try {
-      if (options) {
-        options.new = true;
-      } else {
-        options = { new: true };
-      }
-
-      const result = await this.model.findOneAndUpdate(filter, params, options).lean();
-
-      if (!result) {
-        throw new NotFoundError(filter);
-      }
-      return result;
-    } catch(error) {
-      // TODO: Log the error and transform to https error
-    }
+  protected get_client = async (): Promise<PoolClient>  =>{
+    return await this.pool.connect();
   }
 
-  protected _delete = async (filter: any, options?: MongooseOptions) => {
-    try {
-      const result = await this.model.findOneAndDelete(filter, options).lean();
-      if (!result) {
-        throw new NotFoundError(filter);
-      }
-      return result;
+  protected concat_object_keys (object: any) {
+    const keys = Object.keys(object);
 
-    } catch(error) {
-      // TODO: Log the error and transform to https error
+    if(!keys.length) {
+      return null;
     }
+    let concatenated_keys = `${keys[0]}`;
+
+    for(let i = 1; i < keys.length; i ++) {
+      concatenated_keys += `, ${keys[i]}`;
+    }
+
+    return concatenated_keys;
   }
 
-  protected _find = async (filter: any, options?: MongooseOptions) => {
-    try {
-      return await this.model.find(filter, options).lean();
+  protected get_query_placeholders(object: any) {
+    const keys = Object.keys(object);
 
-    } catch(error) {
-      // TODO: TODO: Log the error and transform to https error
+    if(!keys.length) {
+      return null;
     }
+    let placeholders = `$1`;
+
+    for(let i = 1; i < keys.length; i ++) {
+      placeholders += `, $${ i + 1 }`;
+    }
+
+    return placeholders;
   }
 
-  protected _get = async (filter: any, options?: MongooseOptions) => {
-    try {
-      const invalidValues: any[] = [];
+  protected get_update_placeholders(object: any): string | null {
+    const keys = Object.keys(object);
 
-      for(const prop in filter) {
-        if(filter[prop] === null || filter[prop] === undefined) {
-          invalidValues.push({ prop, value: filter[prop] })
-        }
-      }
-
-      if (invalidValues.length) {
-        throw new ConflictError(invalidValues);
-      }
-
-      const result = await this.model.findOne(filter, options).lean()
-
-      if(!result) {
-        return null;
-      }
-
-      return result;
-
-    } catch(error) {
-      // TODO: TODO: Log the error and transform to https error
+    if(!keys.length) {
+      return null;
     }
+    let placeholders = `${ keys[0] } = $1`;
+
+    for(let i = 1; i < keys.length; i ++) {
+      placeholders += `, ${ keys[i] } = $${ i + 1 }`;
+    }
+
+    return placeholders;
   }
 }

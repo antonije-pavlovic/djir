@@ -1,21 +1,17 @@
-import { ObjectId } from 'mongoose';
-import {  DeleteParams, UpdateParams, GetParams } from '../../repository/repository.models';
-import { IdAPI } from '../api/api.types';
-
 export interface IAccountDB {
     name: string;
-    lastName: string;
+    last_name: string;
 
-    email: string
+    password: string;
+    email: string;
+
     phone: string;
 }
 
 export interface IAccount extends IAccountDB {
-    _id: ObjectId
+    id: number
 }
 
-export type AccountGet = GetParams<Omit<IAccount, 'phone' | 'lastName' | 'name'>>;
-export type UpdateAccount = UpdateParams<AccountGet, Partial<IAccountDB>>;
-export type DeleteAccount = DeleteParams<AccountGet>;
+export type AccountUpdate = Partial<IAccountDB>;
 
-export type UpdateUserAPI = Partial<IAccountDB> & IdAPI;
+export type AccountDTO  = Omit<IAccount, 'password'>;

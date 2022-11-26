@@ -1,52 +1,37 @@
 import { Response } from 'express';
-import { ApiBodyRequest, ApiQueryRequest } from '../api/api.types';
+import { ApiBodyRequest, ApiRequest, IdAPI } from '../api/api.types';
+import AccountMap from './account.data.mapper';
 import AccountService from './account.service';
-import { AccountGet, IAccount, UpdateAccount, DeleteAccount, UpdateUserAPI } from './account.types';
+import { AccountUpdate, IAccountDB } from './account.types';
 
 export default class AccountEndpoint {
 
-  private userService: AccountService;
+  private accountService: AccountService;
   constructor() {
-    this.userService = new AccountService();
+    this.accountService = new AccountService();
   }
 
-  public create = async (request: ApiBodyRequest<IAccount>, response: Response) => {
-    const newUser = await this.userService.create(request.body);
-    response.status(200).json(newUser);
+  public create = async (request: ApiBodyRequest<IAccountDB>, response: Response) => {
+    const new_account = await this.accountService.create(request.body);
+    const account_dto = AccountMap.to_DTO(new_account)
+
+    response.status(200).json(account_dto);
   }
 
-  public get = async (request: ApiQueryRequest<AccountGet>, response: Response) => {
-    const getParams: AccountGet = {
-      _id: request.query._id
-    };
+  public get_by_id = async (request: ApiRequest<any, IdAPI>, response: Response) => {
+    const new_account = await this.accountService.get_by_id(request.params.id);
+    const account_dto = AccountMap.to_DTO(new_account)
 
-    if(request.body.email) {
-      getParams.email = request.body.email
-    }
-
-    const user = await this.userService.get(getParams);
-    response.status(200).json(user);
+    response.status(200).json(account_dto);
   }
 
-  public update = async (request: ApiBodyRequest<UpdateUserAPI>, response: Response) => {
-    const updateParams: UpdateAccount = {
-      filter: {
-        _id: request.body._id
-      },
-      update: {
-        email: request.body.email,
-        lastName: request.body.lastName,
-        name: request.body.name,
-        phone: request.body.phone
-      }
-    };
-
-    const updatedUser = await this.userService.update(updateParams);
-    response.status(200).json(updatedUser);
+  public delete_by_id = async (request: ApiRequest<any, IdAPI>, response: Response) => {
+    const result = await this.accountService.delete_by_id(request.params.id);
+    response.status(200).json(result);
   }
 
-  public delete = async (request: ApiQueryRequest<DeleteAccount>, response: Response) => {
-    const deletedUser = await this.userService.delete(request.query);
-    response.status(200).json(deletedUser);
+  public update_by_id = async (request: ApiRequest<AccountUpdate, IdAPI>, response: Response) => {
+    const result = await this.accountService.update_by_id(request.params.id, request.body);
+    response.status(200).json(result);
   }
 }

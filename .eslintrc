@@ -26,7 +26,6 @@
         "default-param-last": ["error"],
         "default-case": "error",
         "curly": "error",
-        "camelcase": "error",
         "consistent-return": "error",
         "quotes": ["error", "single", { "allowTemplateLiterals": true }],
         "indent": ["error", 2],

@@ -1,28 +1,27 @@
-import UserModel from './account.db';
 import AccountRepository from './account.repository';
-import { DeleteAccount, IAccount, UpdateAccount, AccountGet } from './account.types';
+import { AccountUpdate, IAccountDB } from './account.types';
 
 export default class AccountService {
 
   private accountRepository: AccountRepository;
 
   constructor() {
-    this.accountRepository = new AccountRepository(UserModel);
+    this.accountRepository = new AccountRepository();
   }
 
-  public create = async (user: IAccount): Promise<IAccount> => {
-    return await this.accountRepository.create(user);
+  public create = async (account: IAccountDB) => {
+    return await this.accountRepository.create(account);
   }
 
-  public async get(filter: AccountGet): Promise<IAccount>{
-    return await this.accountRepository.get(filter);
+  public get_by_id = async (id: number) => {
+    return await this.accountRepository.get_by_id(id);
   }
 
-  public async update(params: UpdateAccount): Promise<IAccount> {
-    return await this.accountRepository.update(params);
+  public delete_by_id = async (id: number) => {
+    return await this.accountRepository.delete_by_id(id);
   }
 
-  public async delete(filter: DeleteAccount): Promise<IAccount> {
-    return await this.accountRepository.delete(filter);
+  public update_by_id = async (id: number, account: AccountUpdate) => {
+    return await this.accountRepository.update_by_id(id, account);
   }
 }
