@@ -11,8 +11,9 @@ exports.up = pgm => {
     last_name: { type: 'varchar(1000)', notNull: true },
     email: { type: 'varchar(1000)', notNull: true },
     phone: { type: 'varchar(1000)', notNull: true },
+    password: { type: 'varchar(1000)', notNull: true },
 
-    createdAt: {
+    created_at: {
       type: 'timestamp',
       notNull: true,
       default: pgm.func('current_timestamp'),

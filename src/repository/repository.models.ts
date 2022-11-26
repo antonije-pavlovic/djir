@@ -17,8 +17,7 @@ export type UpdateParams<T, K> = {
     }
 }
 
-export interface DestructuredQuery {
-    keys: string[];
+export interface CreateQuery {
+    text: string;
     values: Array<any>;
-    placeholders: string;
 }

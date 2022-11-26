@@ -19,6 +19,18 @@ class AccountRoute {
       catchErrors(this.accountEndpoint.create)
     );
 
+    this.router.get('/:id',
+      catchErrors(this.accountEndpoint.get_by_id)
+    );
+
+    this.router.delete('/:id',
+      catchErrors(this.accountEndpoint.delete_by_id)
+    );
+
+    this.router.put('/:id',
+      catchErrors(this.accountEndpoint.update_by_id)
+    );
+
     return this.router;
   }
 }

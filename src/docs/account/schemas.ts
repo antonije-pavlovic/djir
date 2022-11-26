@@ -9,7 +9,7 @@ export default {
       },
       last_name: {
         type: 'string',
-        description: 'Account lastname',
+        description: 'Account last_name',
         example: 'Doe'
       },
       email: {

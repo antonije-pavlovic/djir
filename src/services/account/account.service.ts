@@ -1,5 +1,5 @@
 import AccountRepository from './account.repository';
-import { IAccountDB } from './account.types';
+import { AccountUpdate, IAccountDB } from './account.types';
 
 export default class AccountService {
 
@@ -11,5 +11,17 @@ export default class AccountService {
 
   public create = async (account: IAccountDB) => {
     return await this.accountRepository.create(account);
+  }
+
+  public get_by_id = async (id: number) => {
+    return await this.accountRepository.get_by_id(id);
+  }
+
+  public delete_by_id = async (id: number) => {
+    return await this.accountRepository.delete_by_id(id);
+  }
+
+  public update_by_id = async (id: number, account: AccountUpdate) => {
+    return await this.accountRepository.update_by_id(id, account);
   }
 }

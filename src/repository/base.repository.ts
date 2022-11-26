@@ -2,12 +2,11 @@
 /* eslint-disable consistent-return */
 import config from '../config/config';
 import { Pool, PoolClient } from 'pg';
-import { DestructuredQuery } from './repository.models';
 
 
 export default class BaseRepository {
 
-  protected pool: Pool;
+  private pool: Pool;
   protected table: string;
 
   constructor() {
@@ -28,9 +27,7 @@ export default class BaseRepository {
     });
   }
 
-  protected executeQuery = async (text: any, values: any) => {
-    console.log(text)
-    console.log(values)
+  protected execute_query = async (text: any, values?: any) => {
     return await this.pool.query(text, values)
   }
 
@@ -40,45 +37,52 @@ export default class BaseRepository {
    *
    * @returns PoolClient
    */
-  protected getClient = async (): Promise<PoolClient>  =>{
+  protected get_client = async (): Promise<PoolClient>  =>{
     return await this.pool.connect();
   }
 
-  protected _create = async (object: any) => {
-    const destructureQueryObject = this.destructureQueryObject(object)
-
-    if(!destructureQueryObject) {
-      return;
-    }
-
-    const queryText = `INSERT INTO ${this.table}(${ destructureQueryObject.keys })
-          VALUES(${ destructureQueryObject.placeholders }) RETURNING *`;
-
-    return await this.executeQuery(queryText, destructureQueryObject.values)
-  }
-
-  protected destructureQueryObject(object: any): DestructuredQuery | null {
-    const values = Object.values(object);
+  protected concat_object_keys (object: any) {
     const keys = Object.keys(object);
-    const numOfProps = values.length;
 
-    if(!numOfProps) {
+    if(!keys.length) {
       return null;
     }
+    let concatenated_keys = `${keys[0]}`;
 
-    let placeholders = '$1';
-    for(let i = 1; i < numOfProps; i++) {
-      placeholders += `, $${i + 1}`
+    for(let i = 1; i < keys.length; i ++) {
+      concatenated_keys += `, ${keys[i]}`;
     }
 
-    const doubleQuatedKeys: string[] = []
-    for(let i = 0; i < numOfProps; i++) {
-      doubleQuatedKeys.push(`${keys[i]}`)
+    return concatenated_keys;
+  }
+
+  protected get_query_placeholders(object: any) {
+    const keys = Object.keys(object);
+
+    if(!keys.length) {
+      return null;
     }
-    return {
-      keys: doubleQuatedKeys,
-      values,
-      placeholders
+    let placeholders = `$1`;
+
+    for(let i = 1; i < keys.length; i ++) {
+      placeholders += `, $${ i + 1 }`;
     }
+
+    return placeholders;
+  }
+
+  protected get_update_placeholders(object: any): string | null {
+    const keys = Object.keys(object);
+
+    if(!keys.length) {
+      return null;
+    }
+    let placeholders = `${ keys[0] } = $1`;
+
+    for(let i = 1; i < keys.length; i ++) {
+      placeholders += `, ${ keys[i] } = $${ i + 1 }`;
+    }
+
+    return placeholders;
   }
 }
