@@ -1,10 +1,9 @@
-import { Router } from 'express';
+import { FastifyInstance } from 'fastify'
 
 // Import all routes
-import accountRoute from './account';
+import AccountRoute from './account';
 
-const router = Router();
+export default function register_routes(fastify: FastifyInstance) {
 
-router.use('/account', accountRoute.registerRoutes());
-
-export default router;
+  fastify.register(AccountRoute.registerRoutes, { prefix: '/v1'});
+}

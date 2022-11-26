@@ -1,24 +1,24 @@
-import Express from 'express';
-import { Send, Query, ParamsDictionary } from 'express-serve-static-core';
+import { FastifyRequest } from 'fastify'
 
 
-export interface ApiBodyRequest<T> extends Express.Request {
+export interface ApiBodyRequest<T> extends FastifyRequest {
     body: T
 }
 
-export interface ApiQueryRequest<T> extends Express.Request {
-    query: Query & T
+export interface ApiQueryRequest<T> extends FastifyRequest {
+    query: T
 }
 
-export interface ApiRequest<U, T> extends Express.Request {
+export interface ApiParamsRequest<T> extends FastifyRequest {
+    params: T
+}
+
+
+export interface ApiRequest<U, T> extends FastifyRequest {
     body: U,
-    params: ParamsDictionary & T
+    params: T
 }
 
-
-export interface TypedResponse<ResBody> extends Express.Response {
-    json: Send<ResBody, this>;
-}
 
 export interface IdAPI {
   id: number;

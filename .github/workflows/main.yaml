@@ -1,0 +1,23 @@
+name: Build main
+
+on:
+  workflow_dispatch:
+    branches:
+      - main
+ 
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+  
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install modules
+        run: npm install
+
+      - name: Check es lint
+        run: npm run lint

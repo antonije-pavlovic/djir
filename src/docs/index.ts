@@ -5,7 +5,7 @@ import tags from './tags';
 import paths from './paths';
 
 
-export = {
+export default {
   ...basicInfo,
   ...servers,
   ...components,
