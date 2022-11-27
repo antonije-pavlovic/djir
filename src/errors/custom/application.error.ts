@@ -3,7 +3,7 @@ import { IError } from '../error.model';
 export default class ApplicationError extends Error {
   public code: string;
   public status: number;
-  public fields?: any;
+  public fields?: object;
   public message: string;
 
   constructor(error: IError) {
