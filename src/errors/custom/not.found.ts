@@ -3,7 +3,7 @@ import ApplicationError from './application.error';
 
 export default class NotFoundError extends ApplicationError {
 
-  constructor(fields?) {
+  constructor(fields?: object) {
     const errorObject = HTTP_ERROR_CODES.NOT_FOUND;
 
     if(fields) {

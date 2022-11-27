@@ -12,6 +12,11 @@ export const HTTP_ERROR_CODES = {
   NOT_FOUND: {
     code: 'NOT_FOUND',
     status: 404,
-    message: 'TThe server can not find the requested resource.'
+    message: 'The server can not find the requested resource.'
+  },
+  SERVER_ERROR: {
+    code: 'SERVER_ERROR',
+    status: 500,
+    message: 'Internal server error.'
   }
 };
