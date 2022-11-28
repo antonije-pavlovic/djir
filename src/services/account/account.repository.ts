@@ -1,31 +1,33 @@
 import BaseRepository from '../../repository/base.repository';
-import { IAccountDB, AccountUpdate } from './account.types';
+import { IAccount, AccountUpdate, AccountCreate } from './account.types';
 
 export default class AccountRepository extends BaseRepository {
   protected table = 'accounts';
 
-  public create = async (account: IAccountDB): Promise<any>  => {
-    const columns = this.concat_object_keys(account);
-    const placeholders = this.get_query_placeholders(account);
+  public create = async (account: AccountCreate): Promise<IAccount>  => {
+    const transformedObject = this.transformIn(account);
 
-    const query_text = `INSERT INTO ${ this.table }(${columns}) VALUES( ${ placeholders } ) RETURNING *`
-    const values = Object.values(account);
+    const columns = this.concatObjectKeys(transformedObject);
+    const placeholders = this.getQueryPlaceholders(transformedObject);
 
-    const result = await this.execute_query(query_text, values);
-    return result.rows[0];
+    const queryText = `INSERT INTO ${ this.table }(${columns}) VALUES( ${ placeholders } ) RETURNING *`
+    const values = Object.values(transformedObject);
+
+    const result = await this.executeQuery(queryText, values);
+    return this.tranformOut(result.rows[0]) as IAccount;
   }
 
-  public get_by_id = async (id: number): Promise<any>  => {
-    const query_text = `SELECT * FROM ${ this.table } WHERE id = $1`;
+  public getById = async (id: number): Promise<IAccount>  => {
+    const queryText = `SELECT * FROM ${ this.table } WHERE id = $1`;
 
-    const result = await this.execute_query(query_text, [id]);
-    return result.rows[0];
+    const result = await this.executeQuery(queryText, [id]);
+    return this.tranformOut(result.rows[0]) as IAccount;
   }
 
-  public delete_by_id = async (id: number): Promise<boolean> => {
-    const query_text = `DELETE FROM ${ this.table } WHERE id = $1`;
+  public deleteById = async (id: number): Promise<boolean> => {
+    const queryText = `DELETE FROM ${ this.table } WHERE id = $1`;
 
-    const result = await this.execute_query(query_text, [id]);
+    const result = await this.executeQuery(queryText, [id]);
     if(result.rowCount) {
       return true;
     }
@@ -33,18 +35,20 @@ export default class AccountRepository extends BaseRepository {
     return false;
   }
 
-  public update_by_id = async (id: number, doc: AccountUpdate): Promise<boolean | null> => {
-    const set_placeholders = this.get_update_placeholders(doc)
+  public updateById = async (id: number, doc: AccountUpdate): Promise<boolean | null> => {
+    const transformedObject = this.transformIn(doc);
 
-    if (!set_placeholders) {
+    const setPlaceholders = this.getUpdatePlaceholders(doc)
+
+    if (!setPlaceholders) {
       return null;
     }
 
-    const values: any[] = Object.values(doc);
+    const values: any[] = Object.values(transformedObject);
     values.push(id);
-    const query_text = `UPDATE  ${ this.table } SET ${ set_placeholders } WHERE id = $${values.length}`;
+    const queryText = `UPDATE  ${ this.table } SET ${ setPlaceholders } WHERE id = $${values.length}`;
 
-    const result = await this.execute_query(query_text, values);
+    const result = await this.executeQuery(queryText, values);
 
     if(result.rowCount) {
       return true;
