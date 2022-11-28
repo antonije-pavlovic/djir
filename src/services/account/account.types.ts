@@ -1,6 +1,8 @@
-export interface IAccountDB {
+export interface IAccount {
+    id: number;
+
     name: string;
-    last_name: string;
+    lastName: string;
 
     password: string;
     email: string;
@@ -8,10 +10,8 @@ export interface IAccountDB {
     phone: string;
 }
 
-export interface IAccount extends IAccountDB {
-    id: number
-}
+export type AccountCreate = Omit<IAccount, 'id'>;
 
-export type AccountUpdate = Partial<IAccountDB>;
+export type AccountUpdate = Partial<IAccount>;
 
 export type AccountDTO  = Omit<IAccount, 'password'>;

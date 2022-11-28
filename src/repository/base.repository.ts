@@ -27,7 +27,7 @@ export default class BaseRepository {
     });
   }
 
-  protected execute_query = async (text: any, values?: any) => {
+  protected executeQuery = async (text: any, values?: any) => {
     return await this.pool.query(text, values)
   }
 
@@ -37,26 +37,74 @@ export default class BaseRepository {
    *
    * @returns PoolClient
    */
-  protected get_client = async (): Promise<PoolClient>  =>{
+  protected getClient = async (): Promise<PoolClient>  =>{
     return await this.pool.connect();
   }
 
-  protected concat_object_keys (object: any) {
+  protected transformIn = (object: object): object => {
+    const transformedObject = {};
+
+    for(const prop in object) {
+      const oldProp = prop;
+      let newProp = '';
+      for(let i = 0; i < prop.length; i++) {
+        if(prop[i] === prop[i].toUpperCase()) {
+          newProp += `_${prop[i].toLocaleLowerCase()}`
+        } else {
+          newProp += `${prop[i]}`
+        }
+      }
+
+      transformedObject[newProp] = object[oldProp];
+    }
+    return transformedObject;
+  }
+
+  // eslint-disable-next-line max-statements
+  protected tranformOut = (object: object): object => {
+    const transformedObject = {};
+
+    for(const prop in object) {
+      const oldProp = prop;
+      let newProp = '';
+      let flag = false;
+      for(let i = 0; i < prop.length; i++) {
+        if(prop[i] === '_') {
+          flag = true;
+          continue;
+        }
+
+        if(flag) {
+          newProp += prop[i].toLocaleUpperCase();
+          flag = false;
+          continue;
+        }
+        newProp += prop[i]
+
+      }
+
+      transformedObject[newProp] = object[oldProp];
+    }
+    return transformedObject;
+  }
+
+
+  protected concatObjectKeys (object: any) {
     const keys = Object.keys(object);
 
     if(!keys.length) {
       return null;
     }
-    let concatenated_keys = `${keys[0]}`;
+    let concatenatedKeys = `${keys[0]}`;
 
     for(let i = 1; i < keys.length; i ++) {
-      concatenated_keys += `, ${keys[i]}`;
+      concatenatedKeys += `, ${keys[i]}`;
     }
 
-    return concatenated_keys;
+    return concatenatedKeys;
   }
 
-  protected get_query_placeholders(object: any) {
+  protected getQueryPlaceholders(object: any) {
     const keys = Object.keys(object);
 
     if(!keys.length) {
@@ -71,7 +119,7 @@ export default class BaseRepository {
     return placeholders;
   }
 
-  protected get_update_placeholders(object: any): string | null {
+  protected getUpdatePlaceholders(object: any): string | null {
     const keys = Object.keys(object);
 
     if(!keys.length) {

@@ -1,7 +1,7 @@
 import { FastifyReply } from 'fastify'
 import AccountMap from './account.data.mapper';
 import AccountService from './account.service';
-import { AccountUpdate, IAccountDB } from './account.types';
+import { AccountCreate, AccountUpdate } from './account.types';
 import { ApiBodyRequest, ApiRequest, IdAPI, ApiParamsRequest } from '../api/api.types';
 
 export default class AccountEndpoint {
@@ -11,27 +11,30 @@ export default class AccountEndpoint {
     this.accountService = new AccountService();
   }
 
-  public create = async (request: ApiBodyRequest<IAccountDB>, reply: FastifyReply) => {
-    const new_account = await this.accountService.create(request.body);
-    const account_dto = AccountMap.to_DTO(new_account)
-
-    reply.code(200).send(account_dto);
+  public create = async (request: ApiBodyRequest<AccountCreate>, reply: FastifyReply) => {
+    const newAccount = await this.accountService.create(request.body);
+    const accountDto = AccountMap.toDTO(newAccount);
+    reply.code(200).send(accountDto);
   }
 
-  public get_by_id = async (request: ApiParamsRequest<IdAPI>, reply: FastifyReply) => {
-    const new_account = await this.accountService.get_by_id(request.params.id);
-    const account_dto = AccountMap.to_DTO(new_account)
+  public getById = async (request: ApiParamsRequest<IdAPI>, reply: FastifyReply) => {
+    const newAccount = await this.accountService.getById(request.params.id);
+    const accountDto = AccountMap.toDTO(newAccount);
 
-    reply.code(200).send(account_dto);
+    reply.code(200).send(accountDto);
   }
 
-  public delete_by_id = async (request: ApiParamsRequest<IdAPI>, reply: FastifyReply) => {
-    const result = await this.accountService.delete_by_id(request.params.id);
-    reply.code(200).send(result);
+  public deleteById = async (request: ApiParamsRequest<IdAPI>, reply: FastifyReply) => {
+    const result = await this.accountService.deleteById(request.params.id);
+    if(result) {
+      reply.code(200).send({ success: result });
+    }
   }
 
-  public update_by_id = async (request: ApiRequest<AccountUpdate, IdAPI>, reply: FastifyReply) => {
-    const result = await this.accountService.update_by_id(request.params.id, request.body);
-    reply.code(200).send(result);
+  public updateById = async (request: ApiRequest<AccountUpdate, IdAPI>, reply: FastifyReply) => {
+    const result = await this.accountService.updateById(request.params.id, request.body);
+    if(result) {
+      reply.code(200).send({ success: result });
+    }
   }
 }

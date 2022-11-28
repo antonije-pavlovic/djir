@@ -1,5 +1,5 @@
 import AccountRepository from './account.repository';
-import { AccountUpdate, IAccountDB } from './account.types';
+import { AccountCreate, AccountUpdate } from './account.types';
 
 export default class AccountService {
 
@@ -9,19 +9,19 @@ export default class AccountService {
     this.accountRepository = new AccountRepository();
   }
 
-  public create = async (account: IAccountDB) => {
+  public create = async (account: AccountCreate) => {
     return await this.accountRepository.create(account);
   }
 
-  public get_by_id = async (id: number) => {
-    return await this.accountRepository.get_by_id(id);
+  public getById = async (id: number) => {
+    return await this.accountRepository.getById(id);
   }
 
-  public delete_by_id = async (id: number) => {
-    return await this.accountRepository.delete_by_id(id);
+  public deleteById = async (id: number) => {
+    return await this.accountRepository.deleteById(id);
   }
 
-  public update_by_id = async (id: number, account: AccountUpdate) => {
-    return await this.accountRepository.update_by_id(id, account);
+  public updateById = async (id: number, account: AccountUpdate) => {
+    return await this.accountRepository.updateById(id, account);
   }
 }
