@@ -77,24 +77,13 @@ export default class AccountRoute {
             description: 'Account data transfer object',
             $ref: 'AccountDTO'
           },
+          404: {
+            description: 'There is no account with specified id.',
+            $ref: 'NotFoundError'
+          },
           500: {
             description: 'Something went wrong.',
-            content: {
-              'application/json':{
-                schema: {
-                  code: {
-                    type: 'string'
-                  },
-                  message: {
-                    type: 'string'
-                  }
-                },
-                example: {
-                  code: 'INTERNAL_SERVER_ERROR',
-                  message: 'Internal server error'
-                }
-              }
-            }
+            $ref: 'ServerError'
           }
         },
       }

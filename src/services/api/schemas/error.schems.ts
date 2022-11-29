@@ -14,6 +14,22 @@ const serverErrorSchema = {
   }
 }
 
+const notFoundErrorSchema = {
+  $id: 'NotFoundError',
+  type: 'object',
+  required: ['code', 'message'],
+
+  properties: {
+    code: { type: 'string' },
+    message: { type: 'string' }
+  },
+
+  example: {
+    code: 'NOT_FOUND',
+    message: 'The server can not find the requested resource.'
+  }
+}
+
 const unprocessableError = {
   $id: 'UnprocessableError',
   type: 'object',
@@ -35,8 +51,8 @@ const unprocessableError = {
   }
 }
 
-
 export default [
   serverErrorSchema,
-  unprocessableError
+  unprocessableError,
+  notFoundErrorSchema
 ]
