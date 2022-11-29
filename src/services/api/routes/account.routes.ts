@@ -14,27 +14,45 @@ export default class AccountRoute {
         body: { $ref: 'AccountCreate' },
         response: {
           200: {
-            description: 'Account data transfer object',
-            $ref: 'AccountDTO'
+            description: 'Newly created account',
+            content: {
+              'application/json':{
+                schema: {
+                  $ref: 'AccountDTO'
+                },
+                example:{
+                  id: 5,
+                  name: 'John',
+                  lastName: 'Doe',
+                  email: 'john.doe@gmail.com',
+                  phone: '555-333'
+                }
+              }
+            }
           },
-          500: {
+          422: {
             description: 'Something went wrong.',
             content: {
               'application/json':{
                 schema: {
-                  code: {
-                    type: 'string'
-                  },
-                  message: {
-                    type: 'string'
-                  }
+                  $ref: 'UnprocessableError'
                 },
                 example: {
-                  code: 'INTERNAL_SERVER_ERROR',
-                  message: 'Internal server error'
+                  code: 'UNPROCESSABLE',
+                  message: 'The request is well-formed and in a supported format, but can not be processed.',
+                  fields: [
+                    {
+                      path: '/email',
+                      messsage: 'Email is not in good format'
+                    }
+                  ]
                 }
               }
             }
+          },
+          500: {
+            description: 'Something went wrong.',
+            $ref: 'ServerError'
           }
         },
       },
