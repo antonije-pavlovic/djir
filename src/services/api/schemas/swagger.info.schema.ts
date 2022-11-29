@@ -1,6 +1,6 @@
-import { SwaggerOptions } from '@fastify/swagger';
+import { FastifyDynamicSwaggerOptions } from '@fastify/swagger';
 
-const swaggerInfo: SwaggerOptions = {
+const swaggerInfo: FastifyDynamicSwaggerOptions = {
   openapi: {
     info: {
       title: 'Djir motorcyclist app',
@@ -56,7 +56,7 @@ const swaggerInfo: SwaggerOptions = {
     ],
     tags: [
       { name: 'Account', description: 'Account related end-points' },
-    ],
+    ]
   }
 }
 

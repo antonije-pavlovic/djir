@@ -8,7 +8,7 @@ server.listen({ port: config.app.port }, function (err, address) {
     console.log(err)
     process.exit(1)
   }
-  console.log(`Server is ready to ride on port: ${ address }`)
+  console.log(`Server is running on port: ${ address }`)
 })
 
 const closeApp = (server: any) => {

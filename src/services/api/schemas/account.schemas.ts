@@ -1,4 +1,4 @@
-const create_account_schema = {
+const createAccountSchema = {
   $id: 'AccountCreate',
   type: 'object',
   required: ['name', 'lastName', 'password', 'email', 'phone'],
@@ -11,7 +11,7 @@ const create_account_schema = {
   }
 }
 
-const account_dto_schema = {
+const accountDtoSchema = {
   $id: 'AccountDTO',
   type: 'object',
   required: ['name', 'lastName', 'email', 'phone'],
@@ -24,7 +24,7 @@ const account_dto_schema = {
   }
 }
 
-const account_update_schema = {
+const accountUpdateSchema = {
   $id: 'AccountUpdate',
   type: 'object',
   properties: {
@@ -36,7 +36,7 @@ const account_update_schema = {
 }
 
 export default [
-  create_account_schema,
-  account_dto_schema,
-  account_update_schema
+  createAccountSchema,
+  accountDtoSchema,
+  accountUpdateSchema
 ];

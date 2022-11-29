@@ -1,8 +1,10 @@
 import { FastifyInstance } from 'fastify';
-import account_schemas from './account.schemas';
+import accountScheam from './account.schemas';
+import errorSchems from './error.schems';
 
 const allSchemas = [
-  account_schemas
+  errorSchems,
+  accountScheam
 ];
 
 export default function registerSchemas(fastify: FastifyInstance) {
