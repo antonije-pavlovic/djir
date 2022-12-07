@@ -41,6 +41,11 @@ export default class BaseRepository {
     return await this.pool.connect();
   }
 
+  /**
+   * Transform object keys from camelCase to snake_case
+   * @param object
+   * @returns object
+   */
   protected transformIn = (object: object): object => {
     const transformedObject = {};
 
@@ -60,7 +65,11 @@ export default class BaseRepository {
     return transformedObject;
   }
 
-  // eslint-disable-next-line max-statements
+  /**
+   * Transform object keys from snake_case to camelCase
+   * @param object
+   * @returns object
+   */
   protected tranformOut = (object: object): object => {
     const transformedObject = {};
 
