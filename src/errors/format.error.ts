@@ -4,6 +4,7 @@ import { HTTP_ERROR_CODES } from './http.error.codes';
 
 export default function handleAndFormatError(error: any | IError, _request: FastifyRequest, reply: FastifyReply) {
   let data: IError;
+  console.log(error)
 
   if(error.validation) {
     data = handleValidationError(error)

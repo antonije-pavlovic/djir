@@ -6,8 +6,8 @@ exports.up = pgm => {
   pgm.createTable('tmp_role_tmp_permission', {
     id: 'id',
 
-    temp_role_id: { type: 'integer', notNull: true, references: 'template_role' },
-    temp_permission_id: { type: 'integer', notNull: true, references: 'template_permission' },
+    temp_role_id: { type: 'integer', notNull: true, references: 'template_roles' },
+    temp_permission_id: { type: 'integer', notNull: true, references: 'template_permissions' },
 
     created_at: {
       type: 'timestamp',
