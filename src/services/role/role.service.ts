@@ -1,7 +1,7 @@
 import RoleRepository from './role.repository';
 import { IRole } from './role.types';
 
-export default class AccountService {
+export default class RoleService {
 
   private roleRepository: RoleRepository;
 
@@ -9,7 +9,7 @@ export default class AccountService {
     this.roleRepository = new RoleRepository();
   }
 
-  public create = async (): Promise<IRole[]> => {
+  public getAllRoles = async (): Promise<IRole[]> => {
     return await this.roleRepository.getAllRoles();
   }
 }
