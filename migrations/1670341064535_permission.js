@@ -3,11 +3,11 @@
 exports.shorthands = undefined;
 
 exports.up = pgm => {
-  pgm.createTable('permission', {
+  pgm.createTable('permissions', {
     id: 'id',
 
     name: { type: 'varchar(255)', notNull: true },
-    temp_permission_id: { type: 'integer', notNull: true, references: 'template_permission'},
+    temp_permission_id: { type: 'integer', notNull: true, references: 'template_permissions'},
 
     created_at: {
       type: 'timestamp',
@@ -18,5 +18,5 @@ exports.up = pgm => {
 };
 
 exports.down = pgm => {
-  pgm.dropTable('permission');
+  pgm.dropTable('permissions');
 };

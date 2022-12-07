@@ -3,7 +3,7 @@
 exports.shorthands = undefined;
 
 exports.up = pgm => {
-  pgm.createTable('template_permission', {
+  pgm.createTable('template_permissions', {
     id: 'id',
 
     name: { type: 'varchar(255)', notNull: true },
