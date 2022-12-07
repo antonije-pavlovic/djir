@@ -19,7 +19,7 @@
         "block-spacing": "error",
         "require-await": "error",
         "no-invalid-this": "error",
-        "max-statements": ["error", 15],
+        "max-statements": ["error", 30],
         "max-params": ["error", 4],
         "max-depth": ["error", 4],
         "complexity": ["error", 10],
