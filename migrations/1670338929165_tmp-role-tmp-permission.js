@@ -3,7 +3,7 @@
 exports.shorthands = undefined;
 
 exports.up = pgm => {
-  pgm.createTable('tmp_role_tmp_permission', {
+  pgm.createTable('temp_role_temp_permission', {
     id: 'id',
 
     temp_role_id: { type: 'integer', notNull: true, references: 'template_roles' },
@@ -18,5 +18,5 @@ exports.up = pgm => {
 };
 
 exports.down = pgm => {
-  pgm.dropTable('tmp_role_tmp_permission');
+  pgm.dropTable('temp_role_temp_permission');
 };

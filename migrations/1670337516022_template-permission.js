@@ -6,10 +6,16 @@ exports.up = pgm => {
   pgm.createTable('template_permissions', {
     id: 'id',
 
-    name: { type: 'varchar(255)', notNull: true },
-    temp_permission_id: { type: 'integer', notNull: true }, // autoincrement
+    name: { type: 'varchar(100)', notNull: true, unique: true  },
+    unique_permission_id: { type: 'integer', notNull: true, unique: true },
 
     created_at: {
+      type: 'timestamp',
+      notNull: true,
+      default: pgm.func('current_timestamp'),
+    },
+
+    update_at: {
       type: 'timestamp',
       notNull: true,
       default: pgm.func('current_timestamp'),
@@ -18,5 +24,5 @@ exports.up = pgm => {
 };
 
 exports.down = pgm => {
-  pgm.dropTable('template_permission');
+  pgm.dropTable('template_permissions');
 };
