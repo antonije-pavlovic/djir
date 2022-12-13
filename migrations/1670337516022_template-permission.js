@@ -7,7 +7,6 @@ exports.up = pgm => {
     id: 'id',
 
     name: { type: 'varchar(100)', notNull: true, unique: true  },
-    unique_permission_id: { type: 'integer', notNull: true, unique: true },
 
     created_at: {
       type: 'timestamp',

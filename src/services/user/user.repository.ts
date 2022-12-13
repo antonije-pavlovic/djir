@@ -1,20 +1,58 @@
 import BaseRepository from '../../repository/base.repository';
+import { TRANSACTION } from '../../repository/repository.models';
 import { IUser, UserCreate, UserUpdate } from './user.types';
 
 export default class UserRepositpry extends BaseRepository {
   protected table = 'users';
 
-  public create = async (user: UserCreate): Promise<IUser>  => {
-    const transformedObject = this.transformIn(user);
+  /**
+   * TODO: use transaction for creating use and user permission
+   */
+  public create = async (user: UserCreate, roleIds: number[]): Promise<IUser>  => {
+    /**
+     * Open transaction
+     * insert user
+     * insert role
+     * insert permissions
+     * insert role_permission
+     * close transaction
+     */
+    const client = await this.getClient();
+    try {
+      await client.query(TRANSACTION.BEGIN);
 
-    const columns = this.concatObjectKeys(transformedObject);
-    const placeholders = this.getQueryPlaceholders(transformedObject);
+      // CREATE USER
+      const transformedUserObject = this.transformIn(user);
 
-    const queryText = `INSERT INTO ${ this.table }(${columns}) VALUES( ${ placeholders } ) RETURNING *`
-    const values = Object.values(transformedObject);
+      const transformedObject = this.transformIn(user);
 
-    const result = await this.executeQuery(queryText, values);
-    return this.tranformOut(result.rows[0]) as IUser;
+      const columns = this.concatObjectKeys(transformedObject);
+      const placeholders = this.getQueryPlaceholders(transformedUserObject);
+
+      const queryText = `INSERT INTO ${ this.table }(${columns}) VALUES( ${ placeholders } ) RETURNING *`
+      const userValues = Object.values(transformedUserObject);
+      const result = await client.query(queryText, userValues);
+      const transformedUser = this.tranformOut(result.rows[0]) as IUser;
+
+      // INSET INTO ROLE_USER
+      let roleUserQueryText = `INSERT INTO user_role(user_id, role_id) VALUES `;
+      for( let i = 0; i < roleIds.length; i++) {
+        roleUserQueryText += `(${transformedUser.id}, ${roleIds[i]}),`;
+      }
+      roleUserQueryText = roleUserQueryText.slice(0, -1);
+      await client.query(roleUserQueryText);
+
+      await client.query(TRANSACTION.COMMIT);
+      return transformedUser;
+
+    } catch(error) {
+
+      await client.query(TRANSACTION.ROLLBACK);
+      throw error;
+
+    } finally {
+      client.release();
+    }
   }
 
   public getById = async (id: number): Promise<IUser>  => {
@@ -24,6 +62,7 @@ export default class UserRepositpry extends BaseRepository {
     return this.tranformOut(result.rows[0]) as IUser;
   }
 
+  // TODO: soft delete in user_role -> use transaction
   public deleteById = async (id: number): Promise<boolean> => {
     const queryText = `DELETE FROM ${ this.table } WHERE id = $1`;
 

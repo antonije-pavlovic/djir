@@ -1,6 +1,7 @@
+import * as dotenv from 'dotenv' ;
+dotenv.config();
 import server from './services/api/api.service';
 import config from './config/config';
-
 
 // Run the server!
 server.listen({ port: config.app.port }, function (err, address) {
