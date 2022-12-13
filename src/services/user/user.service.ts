@@ -1,5 +1,7 @@
+import { hashPassword } from '../../libs/bcrypt';
 import UserRepository from './user.repository';
 import { UserCreate, UserUpdate } from './user.types';
+import config from '../../config/config';
 
 export default class UserService {
 
@@ -10,7 +12,10 @@ export default class UserService {
   }
 
   public create = async (user: UserCreate) => {
-    return await this.userRepository.create(user);
+    user.password = await hashPassword(user.password)
+    const roleIds = config.roles.publicUser.id;
+
+    return await this.userRepository.create(user, [roleIds]);
   }
 
   public getById = async (id: number) => {

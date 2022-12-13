@@ -23,11 +23,18 @@ function loadConfigurationFromFile() {
   const file = fs.readFileSync(filePath, 'utf-8');
   return JSON.parse(file);
 }
-
+function loadRoles() {
+  const file = fs.readFileSync('./global/templateRolesAndPermissions.json', 'utf-8');
+  return JSON.parse(file);
+}
 function load(): IConfig {
   const config = loadConfigurationFromFile();
   const populatedConfig: IConfig = populateSecretsFromEnv(config);
+  const roles = loadRoles();
 
+  Object.assign(populatedConfig, {
+    roles
+  }) ;
   return populatedConfig;
 }
 

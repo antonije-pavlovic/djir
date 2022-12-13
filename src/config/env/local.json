@@ -4,11 +4,11 @@
         "port": 3000
     },
     "postgres": {
-        "username": "postgres",
-        "password": "postgres",
-        "database": "postgres",
-        "host": "127.0.0.1",
-        "dialect": "postgres",
-        "port": 5432
+        "username": "$POSTGRES_USERNAME",
+        "password": "$POSTGRES_PASSWORD",
+        "database": "$POSTGRES_DATABSE",
+        "host": "$POSTGRES_HOST",
+        "dialect": "$POSTGRES_DIALECT",
+        "port": "$POSTGRES_PORT"
     }
 }

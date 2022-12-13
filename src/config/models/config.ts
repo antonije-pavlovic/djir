@@ -1,5 +1,6 @@
 import { IAppConfig } from './app';
 import { IPostgresConfig } from './database';
+import { TemplateRole } from './roles';
 
 export const ENVIRONMENT = {
   LOCAL: 'local',
@@ -10,5 +11,6 @@ export const ENVIRONMENT = {
 
 export interface IConfig {
   app: IAppConfig;
-  postgres  : IPostgresConfig
+  postgres  : IPostgresConfig;
+  roles: TemplateRole
 }
