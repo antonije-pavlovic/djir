@@ -6,7 +6,7 @@ const roleIdentifier = 1;
 
 const templatePermissions = ['publicCommentRead', 'publicCommentWrite', 'publicCommentPost'];
 exports.up = async pgm => {
-  // CREATE temp_role
+//   CREATE temp_role
   await pgm.db.query(`INSERT INTO template_roles (name) VALUES ('${roleName}')`);
   const tempRoleId = await pgm.db.query(`SELECT id FROM template_roles WHERE name='${roleName}'`);
 

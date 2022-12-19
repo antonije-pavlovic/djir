@@ -3,14 +3,8 @@
 exports.shorthands = undefined;
 
 exports.up = pgm => {
-  pgm.createTable('roles', {
-    id: 'id',
-
-    temp_role_id: { type: 'integer', notNull: true, references: 'template_roles'},
-    // This can be an ID of service, moto club ID, etc
-    entity_id: { type: 'integer', references: 'entities' },
-
-    name: { type: 'varchar(100)', notNull: true },
+  pgm.createTable('moto_clubs', {
+    logo: { type: 'varchar(255)', notNull: true },
 
     created_at: {
       type: 'timestamp',
@@ -23,9 +17,11 @@ exports.up = pgm => {
       notNull: true,
       default: pgm.func('current_timestamp'),
     },
+  }, {
+    inherits: 'entities'
   })
 };
 
 exports.down = pgm => {
-  pgm.dropTable('roles');
+  pgm.dropTable('moto_clubs');
 };
