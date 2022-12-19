@@ -1,0 +1,12 @@
+{
+
+text: bla,
+
+access:["motoklubId:23"]
+
+
+}
+
+
+
+

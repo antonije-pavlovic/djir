@@ -12,11 +12,12 @@ const createUserSchema = {
 const userDtoSchema = {
   $id: 'UserDTO',
   type: 'object',
-  required: ['id', 'email', 'username'],
+  required: ['id', 'email', 'username', 'permissions'],
   properties: {
     id: { type: 'integer' },
     username: { type: 'string' },
-    email: { type: 'string' }
+    email: { type: 'string' },
+    permissions: { type: 'array' }
   }
 }
 
