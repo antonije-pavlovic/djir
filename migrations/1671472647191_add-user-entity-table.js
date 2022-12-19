@@ -4,8 +4,6 @@ exports.shorthands = undefined;
 
 exports.up = pgm => {
   pgm.createTable('user_entity', {
-    id: 'id',
-
     user_id: { type: 'integer', notNull: true, references: 'users' },
     entity_id: { type: 'integer', notNull: true, references: 'entities' },
 
