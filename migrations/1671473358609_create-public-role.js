@@ -34,14 +34,15 @@ exports.up = async pgm => {
 };
 
 exports.down = async pgm => {
-
+  // DELETE RELATIONS
   await pgm.db.query(`DELETE FROM temp_role_temp_permission WHERE temp_role_id=1`);
   await pgm.db.query(`DELETE FROM role_permission WHERE role_id=1`);
 
-
+  // DELETE ROLES
   await pgm.db.query(`DELETE FROM roles WHERE id=1`);
   await pgm.db.query(`DELETE FROM template_roles WHERE id=1`);
 
+  // DELETE PERMISSIONS
   await pgm.db.query(`DELETE FROM permissions WHERE id=1`);
   await pgm.db.query(`DELETE FROM permissions WHERE id=2`);
   await pgm.db.query(`DELETE FROM permissions WHERE id=3`);
