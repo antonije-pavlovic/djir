@@ -5,18 +5,7 @@ import { IUser, UserCreate, UserUpdate } from './user.types';
 export default class UserRepositpry extends BaseRepository {
   protected table = 'users';
 
-  /**
-   * TODO: use transaction for creating use and user permission
-   */
   public create = async (user: UserCreate, roleIds: number[]): Promise<IUser>  => {
-    /**
-     * Open transaction
-     * insert user
-     * insert role
-     * insert permissions
-     * insert role_permission
-     * close transaction
-     */
     const client = await this.getClient();
     try {
       await client.query(TRANSACTION.BEGIN);
@@ -32,19 +21,18 @@ export default class UserRepositpry extends BaseRepository {
       const queryText = `INSERT INTO ${ this.table }(${columns}) VALUES( ${ placeholders } ) RETURNING *`
       const userValues = Object.values(transformedUserObject);
       const result = await client.query(queryText, userValues);
-      const transformedUser = this.tranformOut(result.rows[0]) as IUser;
 
       // INSET INTO ROLE_USER
       let roleUserQueryText = `INSERT INTO user_role(user_id, role_id) VALUES `;
       for( let i = 0; i < roleIds.length; i++) {
-        roleUserQueryText += `(${transformedUser.id}, ${roleIds[i]}),`;
+        roleUserQueryText += `(${result.rows[0].id}, ${roleIds[i]}),`;
       }
       roleUserQueryText = roleUserQueryText.slice(0, -1);
       await client.query(roleUserQueryText);
 
       await client.query(TRANSACTION.COMMIT);
-      return transformedUser;
 
+      return await this.getById(result.rows[0].id);
     } catch(error) {
 
       await client.query(TRANSACTION.ROLLBACK);
@@ -56,13 +44,32 @@ export default class UserRepositpry extends BaseRepository {
   }
 
   public getById = async (id: number): Promise<IUser>  => {
-    const queryText = `SELECT * FROM ${ this.table } WHERE id = $1`;
-
+    const queryText = `SELECT users.id as user_id, users.username, users.email,
+                      users.password, permissions.id as permission_id FROM users
+                INNER JOIN user_role 
+                   ON users.id = user_role.user_id
+                INNER JOIN roles
+                    ON user_role.role_id = roles.id
+                INNER JOIN role_permission
+                    ON roles.id = role_permission.role_id
+                INNER JOIN permissions
+                    ON role_permission.permission_id = permissions.id
+                WHERE users.id = $1`;
     const result = await this.executeQuery(queryText, [id]);
-    return this.tranformOut(result.rows[0]) as IUser;
-  }
 
-  // TODO: soft delete in user_role -> use transaction
+    const fullUser: IUser = {
+      id: result.rows[0]['user_id'],
+      username: result.rows[0]['username'],
+      email: result.rows[0]['email'],
+      password: result.rows[0]['password'],
+      permissions: []
+    };
+    for(let i = 0; i < result.rows.length; i++) {
+      fullUser.permissions.push(result.rows[i]['permission_id'])
+    }
+    return fullUser;
+  }
+  // TODO: use transaction, use soft delete on role_user table, add field deleted: true/false
   public deleteById = async (id: number): Promise<boolean> => {
     const queryText = `DELETE FROM ${ this.table } WHERE id = $1`;
 

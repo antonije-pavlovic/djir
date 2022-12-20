@@ -7,6 +7,10 @@ exports.up = pgm => {
     id: 'id',
 
     temp_permission_id: { type: 'integer', notNull: true, references: 'template_permissions'},
+    // This can be an ID of service, moto club ID, etc
+    entity_id: { type: 'integer', references: 'entities' },
+
+    name: { type: 'varchar(100)', notNull: true },
 
     created_at: {
       type: 'timestamp',

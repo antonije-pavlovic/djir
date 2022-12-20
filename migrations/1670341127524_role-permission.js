@@ -4,8 +4,6 @@ exports.shorthands = undefined;
 
 exports.up = pgm => {
   pgm.createTable('role_permission', {
-    id: 'id',
-
     role_id: { type: 'integer', notNull: true, references: 'roles' },
     permission_id: { type: 'integer', notNull: true, references: 'permissions' },
 

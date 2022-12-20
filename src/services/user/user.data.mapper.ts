@@ -7,6 +7,8 @@ export default class UserMap {
 
       username: user.username,
       email: user.email,
+
+      permissions: user.permissions
     };
   }
 

@@ -3,11 +3,15 @@ export enum Role {
 }
 
 
-export type TemplateRole = {
+export type TemplateRoleMap = {
   [key in Role]: {
     id: number;
-    permissions: Array<IPermision>
   }
+}
+
+export interface ITemplateRole {
+  id: number;
+  name: Role;
 }
 
 export interface IPermision {

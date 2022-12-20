@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "generate:global": "rm -rf && node ./commands/loadTemplateRolesAndPermissions.js",
     "build": "rm -rf dist && tsc -p tsconfig.json",
     "debug": "node --inspect=0.0.0.0:9229 dist/src/index.js",
     "start": "npm run build && node dist/src/index.js",

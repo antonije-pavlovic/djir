@@ -8,7 +8,9 @@ exports.up = pgm => {
 
     temp_role_id: { type: 'integer', notNull: true, references: 'template_roles'},
     // This can be an ID of service, moto club ID, etc
-    refers_to: { type: 'integer', notNull: true },
+    entity_id: { type: 'integer', references: 'entities' },
+
+    name: { type: 'varchar(100)', notNull: true },
 
     created_at: {
       type: 'timestamp',

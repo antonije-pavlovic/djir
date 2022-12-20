@@ -5,10 +5,12 @@ export interface IUser {
 
     password: string;
     email: string;
+
+    permissions: string[];
 }
 
-export type UserCreate = Omit<IUser, 'id'>;
+export type UserCreate = Omit<IUser, 'id' | 'permissions'>;
 
-export type UserUpdate = Partial<IUser>;
+export type UserUpdate = Partial<UserCreate>;
 
-export type UserDTO  = Omit<IUser, 'password'>;
+export type UserDTO  = Omit<IUser, 'password'> & { permissions: string []};
