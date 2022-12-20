@@ -1,21 +1,24 @@
 import { hashPassword } from '../../libs/bcrypt';
+import AuthorizationService from '../authorization/authorization.service';
+import { Role } from '../authorization/roles';
 import UserRepository from './user.repository';
 import { UserCreate, UserUpdate } from './user.types';
-import config from '../../config/config';
 
 export default class UserService {
 
   private userRepository: UserRepository;
+  private authorizationService: AuthorizationService;
 
   constructor() {
     this.userRepository = new UserRepository();
+    this.authorizationService = new AuthorizationService();
   }
 
   public create = async (user: UserCreate) => {
-    user.password = await hashPassword(user.password)
-    const roleIds = config.roles.publicUser.id;
+    user.password = await hashPassword(user.password);
+    const roleIds = await this.authorizationService.getRoleIdsForNames([Role.PUBLIC_USER])
 
-    return await this.userRepository.create(user, [roleIds]);
+    return await this.userRepository.create(user, roleIds );
   }
 
   public getById = async (id: number) => {
