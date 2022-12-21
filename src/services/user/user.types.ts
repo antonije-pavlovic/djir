@@ -6,11 +6,22 @@ export interface IUser {
     password: string;
     email: string;
 
-    permissions: string[];
+    permissions: IPermission[];
+}
+
+export interface IPermission {
+    permissionId: number;
+    entitityId: number;
+    permissionName: string;
 }
 
 export type UserCreate = Omit<IUser, 'id' | 'permissions'>;
 
-export type UserUpdate = Partial<UserCreate>;
+export type UserUpdate = Partial<IUser>;
 
-export type UserDTO  = Omit<IUser, 'password'> & { permissions: string []};
+export type UserDTO  = Omit<IUser, 'password'>;
+
+export interface IUserFind {
+    id?: number;
+    email?: string
+}

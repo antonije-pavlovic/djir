@@ -1,8 +1,8 @@
 import { FastifyReply } from 'fastify'
+import { HTTP_SUCCESS_CODE } from '../../errors/success.codes';
 import { ApiBodyRequest } from '../api/api.types';
-import UserMap from '../user/user.data.mapper';
 import AuthenticationService from './authentication.service';
-import { IRegister } from './authentication.types';
+import { ILoginCredentials, IRegister } from './authentication.types';
 
 export default class AuthenticationEndpoint {
 
@@ -12,9 +12,14 @@ export default class AuthenticationEndpoint {
   }
 
   public register = async (request: ApiBodyRequest<IRegister>, reply: FastifyReply) => {
-    const newUser = await this.authService.register(request.body);
-    const userDto = UserMap.toDTO(newUser);
+    await this.authService.register(request.body);
 
-    reply.code(200).send(userDto);
+    reply.code(HTTP_SUCCESS_CODE.NO_CONTENT.status);
+  }
+
+  public login = async (request: ApiBodyRequest<ILoginCredentials>, reply: FastifyReply) => {
+    const result = await this.authService.login(request.body);
+
+    reply.code(HTTP_SUCCESS_CODE.REQUEST_WAS_SUCCESSFUL.status).send(result);
   }
 }

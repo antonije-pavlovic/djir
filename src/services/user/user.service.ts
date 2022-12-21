@@ -2,7 +2,7 @@ import { hashPassword } from '../../libs/bcrypt';
 import AuthorizationService from '../authorization/authorization.service';
 import { Role } from '../authorization/roles';
 import UserRepository from './user.repository';
-import { UserCreate, UserUpdate } from './user.types';
+import { IUserFind, UserCreate, UserUpdate } from './user.types';
 
 export default class UserService {
 
@@ -21,8 +21,8 @@ export default class UserService {
     return await this.userRepository.create(user, roleIds );
   }
 
-  public getById = async (id: number) => {
-    return await this.userRepository.getById(id);
+  public find = async (params: IUserFind) => {
+    return await this.userRepository.find(params);
   }
 
   public deleteById = async (id: number) => {
