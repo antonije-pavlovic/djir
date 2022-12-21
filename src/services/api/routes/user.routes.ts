@@ -1,4 +1,5 @@
 import { FastifyInstance, DoneFuncWithErrOrRes, FastifyPluginOptions } from 'fastify'
+import AuthenticationService from '../../authentication/authentication.service';
 import UserEndpoint from '../../user/user.endpoint';
 
 
@@ -6,8 +7,12 @@ export default class UserRoutes {
 
   public static registerRoutes(fastify: FastifyInstance, _opts: FastifyPluginOptions, done: DoneFuncWithErrOrRes) {
     const userEndpoint = new UserEndpoint();
+    const authenticationService = new AuthenticationService();
 
     fastify.get('/user/:id', {
+      preHandler: [
+        authenticationService.authorize
+      ],
       schema: {
         description: 'Get user by ID',
         tags: ['User'],
@@ -39,6 +44,9 @@ export default class UserRoutes {
     );
 
     fastify.delete('/user/:id', {
+      preHandler: [
+        authenticationService.authorize
+      ],
       schema: {
         description: 'Delete user by ID',
         tags: ['User'],
@@ -85,6 +93,9 @@ export default class UserRoutes {
     );
 
     fastify.put('/user/:id', {
+      preHandler: [
+        authenticationService.authorize
+      ],
       schema: {
         description: 'Update user by ID',
         tags: ['User'],

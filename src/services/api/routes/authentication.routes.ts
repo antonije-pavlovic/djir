@@ -1,7 +1,6 @@
 import { FastifyInstance, DoneFuncWithErrOrRes, FastifyPluginOptions } from 'fastify'
 import AuthenticationEndpoint from '../../authentication/authentication.endpoint';
 
-
 export default class AuthenticationRoutes {
 
   public static registerRoutes(fastify: FastifyInstance, _opts: FastifyPluginOptions, done: DoneFuncWithErrOrRes) {
@@ -13,37 +12,23 @@ export default class AuthenticationRoutes {
         tags: ['Authentication'],
         body: { $ref: 'UserCreate' },
         response: {
-          200: {
-            description: 'Newly created user',
+          204: {},
+          409: {
+            description: 'User already exists',
             content: {
-              'application/json':{
+              'application/json': {
                 schema: {
-                  $ref: 'UserDTO'
-                },
-                example:{
-                  id: 5,
-                  username: 'fast edi',
-                  email: 'fast.edi@gmail.com',
+                  $ref: 'ConflictError'
                 }
               }
             }
           },
           422: {
-            description: 'Something went wrong.',
+            description: 'Unprocesable entity',
             content: {
-              'application/json':{
+              'application/json': {
                 schema: {
                   $ref: 'UnprocessableError'
-                },
-                example: {
-                  code: 'UNPROCESSABLE',
-                  message: 'The request is well-formed and in a supported format, but can not be processed.',
-                  fields: [
-                    {
-                      path: '/email',
-                      messsage: 'Email is not in good format'
-                    }
-                  ]
                 }
               }
             }
@@ -58,6 +43,30 @@ export default class AuthenticationRoutes {
     },
     );
 
+    fastify.post('/login', {
+      schema: {
+        description: 'Login endpoint',
+        tags: ['Authentication'],
+        body: { $ref: 'LoginCredentials' },
+        response: {
+          401: {
+            description: 'Invalid credentials',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: 'UnauthorizedError'
+                }
+              }
+            }
+          },
+          500: {
+            description: 'Something went wrong.',
+            $ref: 'ServerError'
+          }
+        },
+      },
+      handler: authenticationEndpoint.login
+    }),
     done();
   }
 }

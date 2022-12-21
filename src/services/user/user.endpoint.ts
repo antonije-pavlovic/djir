@@ -12,7 +12,8 @@ export default class UserEndpoint {
   }
 
   public getById = async (request: ApiParamsRequest<IdAPI>, reply: FastifyReply) => {
-    const newUser = await this.userService.getById(request.params.id);
+    console.log(request.ctx);
+    const newUser = await this.userService.find({id: request.params.id});
     const userDto = UserMap.toDTO(newUser);
 
     reply.code(200).send(userDto);

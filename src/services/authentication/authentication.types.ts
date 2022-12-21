@@ -3,3 +3,12 @@ export interface IRegister {
   email: string;
   username: string;
 }
+
+export interface ILoginCredentials {
+  email: string;
+  password: string;
+}
+
+export interface IJWTPayload {
+  id: number;
+}

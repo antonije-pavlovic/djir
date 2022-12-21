@@ -1,4 +1,10 @@
 export const HTTP_ERROR_CODES = {
+  UNAUTHORIZED: {
+    code: 'UNAUTHORIZED',
+    status: 401,
+    message: `The client request has not been completed\
+ because it lacks valid authentication credentials for the requested resource`
+  },
   NOT_FOUND: {
     code: 'NOT_FOUND',
     status: 404,
