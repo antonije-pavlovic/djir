@@ -1,6 +1,7 @@
 version: '3'
 
 services:
+
   db:
     image: postgres
     restart: always
@@ -9,8 +10,24 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
-      - '5432:5432'
+      - '15432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  mongod:
+    image:  bitnami/mongodb:latest
+    restart: always
+    environment:
+      MONGODB_ROOT_USER: root
+      MONGODB_ROOT_PASSWORD: root
+      MONGODB_USERNAME: mongo
+      MONGODB_PASSWORD: mongo
+      MONGODB_DATABASE: djir
+    ports:
+      - 37017:27017
+    volumes:
+      - mongodb_data:/data/db
+
 volumes:
   postgres_data:
+  mongodb_data:

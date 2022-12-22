@@ -3,5 +3,11 @@ export interface IPostgresConfig {
   password: string,
   database: string,
   host: string,
-  port: number;
+  port: number
+}
+
+export interface IMongoConfig {
+  username: string,
+  password: string,
+  port: number
 }

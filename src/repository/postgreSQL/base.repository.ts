@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable consistent-return */
-import config from '../config/config';
+import config from '../../config/config';
 import { Pool, PoolClient } from 'pg';
 
 

@@ -1,8 +1,8 @@
 import ConflictError from '../../errors/custom/conflict.error';
 import ServerError from '../../errors/custom/server.error';
-import BaseRepository from '../../repository/base.repository';
-import { POSTGRES_ERROR_CODES } from '../../repository/postgres.error.codes';
-import { TRANSACTION } from '../../repository/repository.models';
+import BaseRepository from '../../repository/postgreSQL/base.repository';
+import { POSTGRES_ERROR_CODES } from '../../repository/postgreSQL/postgres.error.codes';
+import { TRANSACTION } from '../../repository/postgreSQL/repository.models';
 import { IPermission, IUser, IUserFind, UserCreate, UserUpdate } from './user.types';
 
 export default class UserRepositpry extends BaseRepository {

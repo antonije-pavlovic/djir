@@ -1,14 +1,8 @@
 import { IAppConfig } from './app';
-import { IPostgresConfig } from './database';
-
-export const ENVIRONMENT = {
-  LOCAL: 'local',
-  DEVELOPMENT: 'development',
-  TEST: 'test',
-  PRODUCTION: 'production'
-}
+import { IMongoConfig, IPostgresConfig } from './database';
 
 export interface IConfig {
   app: IAppConfig;
-  postgres  : IPostgresConfig;
+  postgres: IPostgresConfig;
+  mongo: IMongoConfig
 }

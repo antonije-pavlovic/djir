@@ -1,5 +1,6 @@
 import fs from 'fs';
-import { IConfig, ENVIRONMENT } from './models/config';
+import { ENVIRONMENT } from './models/app';
+import { IConfig } from './models/config';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function populateSecretsFromEnv(config: any): IConfig {
