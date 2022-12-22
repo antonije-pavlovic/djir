@@ -1,4 +1,4 @@
-import BaseRepository from '../../repository/base.repository';
+import BaseRepository from '../../repository/postgreSQL/base.repository';
 import { ITemplateRole } from './roles';
 
 export default class AuthorizationRepository extends BaseRepository {

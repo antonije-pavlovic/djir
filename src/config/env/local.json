@@ -7,8 +7,13 @@
         "username": "$POSTGRES_USERNAME",
         "password": "$POSTGRES_PASSWORD",
         "database": "$POSTGRES_DATABSE",
-        "host": "$POSTGRES_HOST",
+        "host": "127.0.0.1",
         "dialect": "$POSTGRES_DIALECT",
-        "port": "$POSTGRES_PORT"
+        "port": 15432
+    },
+    "mongo": {
+        "username": "$MONGO_USERNAME",
+        "password": "$MONGO_PASSWORD",
+        "port": 127017
     }
 }
