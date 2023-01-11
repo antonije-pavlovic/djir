@@ -17,13 +17,11 @@ export interface ApiParamsRequest<T> extends FastifyRequest {
     ctx: FastifyContext & IRequestContext
 }
 
-
 export interface ApiRequest<U, T> extends FastifyRequest {
     body: U,
     params: T
     ctx: FastifyContext & IRequestContext
 }
-
 
 export interface IdAPI {
   id: number;

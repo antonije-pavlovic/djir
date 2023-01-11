@@ -14,6 +14,11 @@
     "mongo": {
         "username": "$MONGO_USERNAME",
         "password": "$MONGO_PASSWORD",
-        "port": 37017
+        "port": 37017,
+        "host": "127.0.0.1",
+        "database": "djir",
+        "maxPoolSize": 50,
+        "minPoolSize": 2,
+        "maxConnecting": 2
     }
 }
