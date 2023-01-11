@@ -9,7 +9,7 @@ export default class UserRoutes {
     const userEndpoint = new UserEndpoint();
     const authenticationService = new AuthenticationService();
 
-    fastify.get('/user/:id', {
+    fastify.get('/:id', {
       preHandler: [
         authenticationService.authorize
       ],
@@ -43,7 +43,7 @@ export default class UserRoutes {
     userEndpoint.getById
     );
 
-    fastify.delete('/user/:id', {
+    fastify.delete('/:id', {
       preHandler: [
         authenticationService.authorize
       ],
@@ -92,7 +92,7 @@ export default class UserRoutes {
     userEndpoint.deleteById
     );
 
-    fastify.put('/user/:id', {
+    fastify.put('/:id', {
       preHandler: [
         authenticationService.authorize
       ],
